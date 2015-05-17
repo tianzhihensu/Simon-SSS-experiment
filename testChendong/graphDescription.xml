@@ -12,7 +12,7 @@
 			<leaf value="200" delay_mu="50" delay_sigma="30">EG</leaf>
 		</sequence>
 		<sequence>
-			<leaf value="80" delay_mu="185" delay_sigma="30">EC</leaf>
+			<leaf value="80" delay_mu="60" delay_sigma="30">EC</leaf>
 			<leaf value="120" delay_mu="150" delay_sigma="10">N4</leaf>
 			<leaf value="80" delay_mu="160" delay_sigma="40">EH</leaf>
 		</sequence>
