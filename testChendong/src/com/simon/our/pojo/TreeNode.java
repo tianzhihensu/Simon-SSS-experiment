@@ -23,6 +23,8 @@ public class TreeNode {
 	private List<Double> probabilityList = null;	// 存放概率的数组，主要用于存放“选择”（其实就包含了循环）非叶节点
 	private Integer loopMax = null;		// loop节点的最大循环次数
 	
+	private Integer capacity = null;	// 每个节点都有一个容量限制，即最多只能放多少个monitors
+	
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
 	}
@@ -98,5 +100,12 @@ public class TreeNode {
 	}
 	public Integer getLoopMax() {
 		return this.loopMax;
+	}
+	
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+	public Integer getCapacity() {
+		return this.capacity;
 	}
 }

@@ -1,6 +1,7 @@
 package com.simon.our.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.w3c.dom.Node;
@@ -17,9 +18,9 @@ import com.simon.our.util.Constant;
 public class TreeOperation {
 
 	/**
-	 * 将一个子节点集合添加到当前节点的子节点列表中
+	 * 将一个节点集合添加到当前节点的孩子节点列表中
 	 * @param currentTreeNode	数节点
-	 * @param nodesList	子节点的有序集合
+	 * @param nodesList	节点的有序集合
 	 */
 	public void addNodeAsChild(TreeNode currentTreeNode, NodeList nodesList) {
 		
@@ -27,13 +28,8 @@ public class TreeOperation {
 		for (int i = 0; i < nodesList.getLength(); i++) {
 			Node node = nodesList.item(i);
 			if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
-				String nodeName = node.getTextContent();
-				TreeNode treeNode = new TreeNode();
-				treeNode.setNodeName(nodeName);	//设置叶子节点的名称，在服务结构图中，对应服务节点或者通信链路
-				treeNode.setChildrenNodeList(null);	// 将其子节点列表设置为null
-				treeNode.setNodeType(Constant.LEAF);	// 因为该节点是叶子节点，设置节点的类型为LEAF
-				treeNode.setParentNode(currentTreeNode);	// 设置父节点
-				childrenNodeList.add(treeNode);
+				TreeNode leafTreeNode = this.initLeafTreeNode(currentTreeNode, node);
+				childrenNodeList.add(leafTreeNode);
 			}
 		}
 		currentTreeNode.setChildrenNodeList(childrenNodeList);
@@ -56,6 +52,10 @@ public class TreeOperation {
 		treeNode.setDelayMu(Integer.valueOf(XMLNode.getAttributes().getNamedItem("delay_mu").getNodeValue()));
 		treeNode.setDelaySigma(Integer.valueOf(XMLNode.getAttributes().getNamedItem("delay_sigma").getNodeValue()));
 		treeNode.setChildrenNodeList(null);
+		treeNode.setAllocationResult(null);
+		treeNode.setAlloMap(null);
+		
+		treeNode.setCapacity(1);	//叶子节点的容量为1，即它自身
 		treeNode.setNodeType(Constant.LEAF);
 		treeNode.setParentNode(parentTreeNode);
 		
@@ -73,8 +73,16 @@ public class TreeOperation {
 		concurTreeNode.setNodeName("concurrency");
 		List<TreeNode> childrenList = new ArrayList<TreeNode>();
 		concurTreeNode.setChildrenNodeList(childrenList);
+		
+		// 对于非叶节点，将两个哈希表初始化
+		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
+		concurTreeNode.setAllocationResult(allocationResult);
+		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		concurTreeNode.setAlloMap(alloMap);
+		
 		concurTreeNode.setNodeType(Constant.CONCURRENCY);
 		concurTreeNode.setParentNode(parentTreeNode);
+		concurTreeNode.setCapacity(0);	// 刚开始生成树的时候，无法知道以该节点为树根的字数有多少个叶节点
 		
 		return concurTreeNode;
 	}
@@ -82,6 +90,7 @@ public class TreeOperation {
 	/**
 	 * 创建一个“顺序”非叶节点
 	 * @param parentTreeNode
+	 * @param XMLNode
 	 * @return
 	 */
 	public TreeNode initSequTreeNode(TreeNode parentTreeNode, Node XMLNode) {
@@ -89,8 +98,16 @@ public class TreeOperation {
 		sequTreeNode.setNodeName("sequence");
 		List<TreeNode> childrenList = new ArrayList<TreeNode>();
 		sequTreeNode.setChildrenNodeList(childrenList);
+		
+		// 对于非叶节点，将两个哈希表初始化
+		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
+		sequTreeNode.setAllocationResult(allocationResult);
+		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		sequTreeNode.setAlloMap(alloMap);
+		
 		sequTreeNode.setNodeType(Constant.SEQUENCE);
 		sequTreeNode.setParentNode(parentTreeNode);
+		sequTreeNode.setCapacity(0);	// 刚开始生成树的时候，无法知道以该节点为树根的字数有多少个叶节点
 		
 		// 另外，需要判断的是parentTreeNode是否是“选择”节点，如果是，要得到XMLNode的概率属性值，
 		// 然后将得到的每一个值添加到parentTreeNode的概率列表中。
@@ -117,8 +134,17 @@ public class TreeOperation {
 		seleTreeNode.setNodeName("selection");
 		List<TreeNode> childrenList = new ArrayList<TreeNode>();
 		seleTreeNode.setChildrenNodeList(childrenList);
+		
+
+		// 对于非叶节点，将两个哈希表初始化
+		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
+		seleTreeNode.setAllocationResult(allocationResult);
+		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		seleTreeNode.setAlloMap(alloMap);
+		
 		seleTreeNode.setNodeType(Constant.SELECTION);
 		seleTreeNode.setParentNode(parentTreeNode);
+		seleTreeNode.setCapacity(0);	// 刚开始生成树的时候，无法知道以该节点为树根的子树有多少个叶节点
 		
 		return seleTreeNode;
 	}
@@ -145,8 +171,16 @@ public class TreeOperation {
 		loopTreeNode.setNodeName(Constant.loopName);
 		loopTreeNode.setNodeType(Constant.LOOP);
 		List<TreeNode> childrenList = new ArrayList<TreeNode>();
+		
+		// 对于非叶节点，将两个哈希表初始化
+		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
+		loopTreeNode.setAllocationResult(allocationResult);
+		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		loopTreeNode.setAlloMap(alloMap);
+		
 		loopTreeNode.setChildrenNodeList(childrenList);
 		loopTreeNode.setParentNode(parentTreeNode);	
+		loopTreeNode.setCapacity(0);	// 刚开始生成树的时候，无法知道以该节点为树根的子树有多少个叶节点
 		
 		return loopTreeNode;
 	}

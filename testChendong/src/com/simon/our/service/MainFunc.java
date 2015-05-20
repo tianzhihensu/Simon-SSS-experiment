@@ -25,5 +25,6 @@ public class MainFunc {
 		TreeOperation treeOperation = new TreeOperation();
 		treeOperation.traverseTree(rootTreeNode);
 		
+		
 	}
 }
