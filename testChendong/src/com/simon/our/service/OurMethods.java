@@ -44,6 +44,7 @@ public class OurMethods {
 			
 			return optimalResTime;
 		}
+		
 		// 如果该节点的孩子节点不全是叶节点，那就说明该节点的孩子节点都是非叶节点
 		List<TreeNode> childrenList = new ArrayList<TreeNode>();
 		childrenList = treeNode.getChildrenNodeList();
