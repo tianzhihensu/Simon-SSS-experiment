@@ -6,11 +6,15 @@ import java.util.List;
 
 public class DPcombination {
 
-	/*
-	 * allocate balls to binList
+	/**
+	 *  allocate balls to binList
 	 * return all allocation combinations
+	 * 
+	 * @param balls	monitor的个数
+	 * @param binList	相当于桶的个数，并且，每个桶都有一个容量限制
+	 * @return
 	 */
-	public static List<List<Integer>> dpAllocation(int balls,
+	public  List<List<Integer>> dpAllocation(int balls,
 			List<Integer> binList) {
 		if (binList.size() == 0) {
 			if (balls == 0) {
@@ -65,16 +69,16 @@ public class DPcombination {
 	 * two dimensional cache the first key means bins the second key means balls
 	 * the final value means the allocation combinations
 	 */
-	static HashMap<Integer, HashMap<Integer, List<List<Integer>>>> cache = new HashMap<>();
+	HashMap<Integer, HashMap<Integer, List<List<Integer>>>> cache = new HashMap<>();
 
 	public static void main(String[] args) {
 		List<Integer> binSizeList = new ArrayList<>();
-		binSizeList.add(1);
-		binSizeList.add(3);
+		binSizeList.add(4);
+		binSizeList.add(11);
 		// binSizeList.add(3);
-		int balls = 2;
-
-		List<List<Integer>> result = dpAllocation(balls, binSizeList);
+		int balls = 5;
+		DPcombination dPcombination = new DPcombination();
+		List<List<Integer>> result = dPcombination.dpAllocation(balls, binSizeList);
 		for (List<Integer> list : result) {
 			for (Integer integer : list) {
 				System.out.print(integer + ",");

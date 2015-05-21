@@ -18,7 +18,7 @@ public class TreeNode {
 	
 	// 以下是非叶节点需要用到的一些属性（待定）
 	private HashMap<Integer, Integer> allocationResult = null;	// 第一个参数：分配给该子树的momitor的数量， 第二个参数：获得的最优响应时间
-	private HashMap<Integer, ArrayList<Integer>> alloMap = null;	//分配k个monitor时，各个子节点的个数分配情况
+	private HashMap<Integer, List<Integer>> alloMap = null;	//分配k个monitor时，各个子节点的个数分配情况
 	
 	private List<Double> probabilityList = null;	// 存放概率的数组，主要用于存放“选择”（其实就包含了循环）非叶节点
 	private Integer loopMax = null;		// loop节点的最大循环次数
@@ -81,10 +81,10 @@ public class TreeNode {
 		return this.allocationResult;
 	}
 	
-	public void setAlloMap(HashMap<Integer, ArrayList<Integer>> alloMap) {
+	public void setAlloMap(HashMap<Integer, List<Integer>> alloMap) {
 		this.alloMap = alloMap;
 	}
-	public HashMap<Integer, ArrayList<Integer>> getAlloMap() {
+	public HashMap<Integer, List<Integer>> getAlloMap() {
 		return this.alloMap;
 	}
 	

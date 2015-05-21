@@ -136,4 +136,45 @@ public class TreeConstruction {
 		return flag;
 	}
 	
+	/**
+	 * 计算树中每个节点的capacity
+	 * @param treeNode
+	 */
+	public void capacitySet(TreeNode treeNode) {
+		Integer nums = 0;
+		if (isAllLeafTreeNode(treeNode)) {
+			nums = treeNode.getChildrenNodeList().size();
+			treeNode.setCapacity(nums);
+			
+			return ;
+		}
+		
+		// 不是叶子节点，那就是非叶节点
+		List<TreeNode> childrenList = treeNode.getChildrenNodeList();
+		for (int i = 0; i < childrenList.size(); i++) {
+			capacitySet(childrenList.get(i));
+			nums += childrenList.get(i).getCapacity();
+		}
+		treeNode.setCapacity(nums);
+		
+	}
+	
+	/**
+	 * 判断该节点的子节点是否都是叶子节点
+	 * @param treeNode
+	 * @return	是的话，返回true
+	 */
+	public Boolean isAllLeafTreeNode(TreeNode treeNode) {
+		Boolean flag = true;
+		List<TreeNode> childrenList = treeNode.getChildrenNodeList();
+		for (int i = 0; i < childrenList.size(); i++) {
+			if (!(childrenList.get(i).getNodeType().equals(Constant.LEAF))) {	// 如果某个孩子节点的nodeType的标记不是
+				flag = false;													// Constant.LEAF，那就置flag为false
+				break;
+			}
+		}
+		
+		return flag;
+	}
+	
 }

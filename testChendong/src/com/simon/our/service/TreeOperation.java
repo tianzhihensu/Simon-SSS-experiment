@@ -77,7 +77,7 @@ public class TreeOperation {
 		// 对于非叶节点，将两个哈希表初始化
 		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
 		concurTreeNode.setAllocationResult(allocationResult);
-		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		HashMap<Integer, List<Integer>> alloMap = new HashMap<Integer, List<Integer>>();
 		concurTreeNode.setAlloMap(alloMap);
 		
 		concurTreeNode.setNodeType(Constant.CONCURRENCY);
@@ -102,7 +102,7 @@ public class TreeOperation {
 		// 对于非叶节点，将两个哈希表初始化
 		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
 		sequTreeNode.setAllocationResult(allocationResult);
-		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		HashMap<Integer, List<Integer>> alloMap = new HashMap<Integer, List<Integer>>();
 		sequTreeNode.setAlloMap(alloMap);
 		
 		sequTreeNode.setNodeType(Constant.SEQUENCE);
@@ -139,7 +139,7 @@ public class TreeOperation {
 		// 对于非叶节点，将两个哈希表初始化
 		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
 		seleTreeNode.setAllocationResult(allocationResult);
-		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		HashMap<Integer, List<Integer>> alloMap = new HashMap<Integer, List<Integer>>();
 		seleTreeNode.setAlloMap(alloMap);
 		
 		seleTreeNode.setNodeType(Constant.SELECTION);
@@ -175,7 +175,7 @@ public class TreeOperation {
 		// 对于非叶节点，将两个哈希表初始化
 		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
 		loopTreeNode.setAllocationResult(allocationResult);
-		HashMap<Integer, ArrayList<Integer>> alloMap = new HashMap<Integer, ArrayList<Integer>>();
+		HashMap<Integer, List<Integer>> alloMap = new HashMap<Integer, List<Integer>>();
 		loopTreeNode.setAlloMap(alloMap);
 		
 		loopTreeNode.setChildrenNodeList(childrenList);
@@ -183,6 +183,26 @@ public class TreeOperation {
 		loopTreeNode.setCapacity(0);	// 刚开始生成树的时候，无法知道以该节点为树根的子树有多少个叶节点
 		
 		return loopTreeNode;
+	}
+	
+	/**
+	 * 这里的树根节点比较特殊，虽然其类型是顺序节点，但并不能用初始化顺序节点的方式对树根节点进行初始化
+	 * @return
+	 */
+	public TreeNode initRootTreeNode() {
+		TreeNode rootTreeNode = new TreeNode();
+		rootTreeNode.setNodeName("root");
+		rootTreeNode.setChildrenNodeList(null);
+		rootTreeNode.setNodeType(Constant.SEQUENCE);
+		rootTreeNode.setParentNode(null);
+		
+		// 对于非叶节点，将两个哈希表初始化
+		HashMap<Integer, Integer> allocationResult = new HashMap<Integer, Integer>();
+		rootTreeNode.setAllocationResult(allocationResult);
+		HashMap<Integer, List<Integer>> alloMap = new HashMap<Integer, List<Integer>>();
+		rootTreeNode.setAlloMap(alloMap);
+		
+		return rootTreeNode;
 	}
 	
 	/**

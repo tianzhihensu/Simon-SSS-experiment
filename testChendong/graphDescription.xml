@@ -20,14 +20,14 @@
 			<leaf value="100" delay_mu="150" delay_sigma="15">ED</leaf>
 			<leaf value="90" delay_mu="100" delay_sigma="25">N5</leaf>
 			<leaf value="80" delay_mu="200" delay_sigma="15">EF</leaf>
-			<loop loopMax="4" probAttr_1="0.3" probAttr_2="0.2" probAttr_3="0.4" probAttr_4="0.1">
+			<!-- <loop loopMax="4" probAttr_1="0.3" probAttr_2="0.2" probAttr_3="0.4" probAttr_4="0.1">
 				<leaf value="110" delay_mu="130" delay_sigma="25">N9</leaf>
 				<leaf value="200" delay_mu="90" delay_sigma="60">EP</leaf>
-			</loop>
+			</loop> -->
 		</sequence>
 	</concurrency>
 	<leaf value="150" delay_mu="200" delay_sigma="20">EI</leaf>
-	<selection>
+	<!-- <selection>
 		<sequence probability="0.4">
 			<leaf value="100" delay_mu="150" delay_sigma="15">EJ</leaf>
 			<leaf value="123" delay_mu="156" delay_sigma="78">N7</leaf>
@@ -38,6 +38,6 @@
 			<leaf value="156" delay_mu="154" delay_sigma="78">N8</leaf>
 			<leaf value="107" delay_mu="134" delay_sigma="19">EM</leaf>
 		</sequence>
-	</selection>
+	</selection> -->
 	<leaf value="200" delay_mu="50" delay_sigma="30">N6</leaf>
 </sequence>
