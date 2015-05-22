@@ -1,9 +1,11 @@
 package com.simon.our.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import com.simon.our.pojo.TreeNode;
@@ -25,7 +27,7 @@ public class OurMethods {
 	 */
 	public Integer getOptimalResTime(TreeNode treeNode, Integer k) {
 		Integer optimalResTime = 0;
-		System.out.println("hehe\n");
+		/*System.out.println("hehe\n");*/
 		// 如果已经存入了已知的值，就直接返回已经存入的值，避免重复计算
 		if (treeNode.getAllocationResult().get(k) != null) {
 			return treeNode.getAllocationResult().get(k);
@@ -40,7 +42,7 @@ public class OurMethods {
 				optimalResTime = (Integer) resList.get(0);
 				allocationResult.put(k, optimalResTime);
 				
-				ArrayList<Integer> indexCollection = (ArrayList<Integer>) resList.get(1);
+				List<Integer> indexCollection = (List<Integer>) resList.get(1);
 				HashMap<Integer, List<Integer>> alloMap = treeNode.getAlloMap();
 				alloMap.put(k, indexCollection);
 			}
@@ -86,7 +88,8 @@ public class OurMethods {
 		DPcombination dPcombination = new DPcombination();
 		combiResult = dPcombination.dpAllocation(k, binList);
 		
-		System.out.println("k:" + k);
+		// 做测试用
+		/*System.out.println("k:" + k);
 		for (int i = 0; i < binList.size(); i++) {
 			System.out.print(binList.get(i) + "    ");
 		}
@@ -95,7 +98,7 @@ public class OurMethods {
 			List<Integer> ss = combiResult.get(i);
 			System.out.print(combiResult.get(i) + "    ");
 		}
-		System.out.println();
+		System.out.println();*/
 		
 		// 遍历所有的组合数，得到一个最优解
 		optimalResTime = 0;
@@ -165,17 +168,28 @@ public class OurMethods {
 			indexAndDelayValue.put(String.valueOf(i), childrenList.get(i).getDelayMu());
 		}
 		
-		ByValueComparator bvc = new ByValueComparator(indexAndDelayValue);
-		TreeMap<String, Integer> sortedMap = new TreeMap<String, Integer>(bvc);
-		sortedMap.putAll(indexAndDelayValue);
+		List<Map.Entry<String, Integer>> list_Data = new ArrayList<Map.Entry<String, Integer>>(
+				indexAndDelayValue.entrySet());
+		Collections.sort(list_Data,
+				new Comparator<Map.Entry<String, Integer>>() {
+					public int compare(Map.Entry<String, Integer> o1,
+							Map.Entry<String, Integer> o2) {
+						if ((o2.getValue() - o1.getValue()) > 0)
+							return 1;
+						else if ((o2.getValue() - o1.getValue()) == 0)
+							return 0;
+						else
+							return -1;
+					}
+				});
 		
 		Integer count = 0;	// 计数器
 		Integer sumOfDelayMu = 0;
-		for (String index : sortedMap.keySet()) {
+		for (int i = 0; i < list_Data.size(); i++) {
 			if (count == k) {
 				break;
 			}
-			sumOfDelayMu += indexAndDelayValue.get(index);
+			sumOfDelayMu += list_Data.get(i).getValue();
 			count ++;
 		}
 		
@@ -183,13 +197,14 @@ public class OurMethods {
 		resList.add(optimalResTime);
 		
 		//除了最佳响应时间，还要保存到底哪些下标被monitor了
-		ArrayList<Integer> indexCollection = new ArrayList<Integer>();
+		List<Integer> indexCollection = new ArrayList<Integer>();
 		count = 0;
-		for (String index : sortedMap.keySet()) {
+		for (int i = 0; i < list_Data.size(); i++) {
 			if (count == k) {
 				break;
 			}
-			indexCollection.add(Integer.valueOf(index));
+			indexCollection.add(Integer.valueOf(list_Data.get(i).getKey()));
+			count ++;
 		}
 		resList.add(indexCollection);
 		
@@ -236,7 +251,44 @@ public class OurMethods {
 		return ResTime;
 	}
 	
-	
+	/**
+	 * 找到树中有哪些节点是被monitor到的
+	 * @param treeNode
+	 * @param k
+	 * @return 返回被monitor的节点的名称列表
+	 */
+	public List<String> getNodesMonitored(TreeNode treeNode, Integer k) {
+		List<String> nodesList = new ArrayList<String>();
+		if (isAllLeafTreeNode(treeNode)) {
+			List<Integer> alloIndexList = treeNode.getAlloMap().get(k);
+			List<TreeNode> childrenList = treeNode.getChildrenNodeList();
+			for (int i = 0; i < alloIndexList.size(); i++) {
+				TreeNode node = childrenList.get(alloIndexList.get(i));
+				nodesList.add(node.getNodeName());
+			}
+			
+			return nodesList;
+		}
+		
+		// 如果其孩子节点不全是叶子节点，则递归寻找
+		
+		// 首先取出孩子节点
+		List<TreeNode> childrenList = treeNode.getChildrenNodeList();
+		// 然后得到该节点分配K个monitors的时候其子节点的个数分配情况
+		List<Integer> combiList = treeNode.getAlloMap().get(k);
+		
+		for (int i = 0; i < childrenList.size(); i++) {
+			TreeNode childTreeNode = childrenList.get(i);
+			Integer count = combiList.get(i);	// 在该孩子节点上分配了几个monitors
+			List<String> tempNodesList = getNodesMonitored(childTreeNode, count);
+			// 将得到的临时结果放在外部的大结果列表里
+			for (int j = 0; j < tempNodesList.size(); j++) {
+				nodesList.add(tempNodesList.get(j));
+			}
+		}
+		
+		return nodesList;
+	}
 	
 	public static void main(String[] args) {
 		HashMap<String, Integer> datas = new HashMap<String, Integer>(){{

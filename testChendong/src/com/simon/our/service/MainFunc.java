@@ -31,10 +31,23 @@ public class MainFunc {
 		
 		// 树的遍历
 		treeOperation.traverseTree(rootTreeNode);
-		
-		int k = 5;
+		Integer numNodes = rootTreeNode.getCapacity();
 		OurMethods ourMethods = new OurMethods();
-		Integer optimalResTime = ourMethods.getOptimalResTime(rootTreeNode, k);
-		System.out.println(optimalResTime);
+		for (int k = 0; k <= numNodes; k++) {
+			System.out.println("k = " + k);
+			
+			Integer optimalResTime = ourMethods.getOptimalResTime(rootTreeNode, k);
+			System.out.println("最佳响应时间：" + optimalResTime);
+			
+			// 计算最佳响应时间下的monitors分布情况，即哪些点是被分配到monitor的
+			List<String> nodeNamesList = ourMethods.getNodesMonitored(rootTreeNode, k);
+			System.out.print("nodeNames:  ");
+			for (int i = 0; i < nodeNamesList.size(); i++) {
+				System.out.print(nodeNamesList.get(i) + "  ");
+			}
+			System.out.println();
+			System.out.println();
+		}
+		
 	}
 }
