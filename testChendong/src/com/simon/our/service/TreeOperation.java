@@ -1,8 +1,11 @@
 package com.simon.our.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -241,6 +244,51 @@ public class TreeOperation {
 			TreeNode childNode = childrenList.get(i);
 			traverseTree(childNode);
 		}
+	}
+	
+	/**
+	 * 给定一个顺序节点（其孩子节点都是叶节点），根据孩子节点的delay_mu值进行降序排序
+	 * 
+	 * @param treeNode
+	 * @return
+	 */
+	public void sort(TreeNode treeNode) {
+		
+		List<TreeNode> childrenList = treeNode.getChildrenNodeList();
+		HashMap<String, Integer> indexAndDelayValue = new HashMap<String, Integer>();	// index这里设置为String类型
+		for (int i = 0; i < childrenList.size(); i++) {
+			indexAndDelayValue.put(String.valueOf(i), childrenList.get(i).getDelayMu());
+		}
+		
+		List<Map.Entry<String, Integer>> list_Data = new ArrayList<Map.Entry<String, Integer>>(
+				indexAndDelayValue.entrySet());
+		Collections.sort(list_Data,
+				new Comparator<Map.Entry<String, Integer>>() {
+					public int compare(Map.Entry<String, Integer> o1,
+							Map.Entry<String, Integer> o2) {
+						if ((o2.getValue() - o1.getValue()) > 0)
+							return 1;
+						else if ((o2.getValue() - o1.getValue()) == 0)
+							return 0;
+						else
+							return -1;
+					}
+				});
+		
+		// 存储排序之后的下标变化情况
+		List<Integer> indexList = new ArrayList<Integer>();
+		for (int i = 0; i < list_Data.size(); i++) {
+			indexList.add(Integer.valueOf(list_Data.get(i).getKey()));
+		}
+		
+		List<TreeNode> newChildrenList = new ArrayList<TreeNode>();
+		for (int i = 0; i < indexList.size(); i++) {
+			newChildrenList.add(childrenList.get(indexList.get(i)));
+		}
+		
+		// 将排序之后的孩子节点list重新赋值给该“顺序”非叶节点
+		treeNode.setChildrenNodeList(newChildrenList);	
+		
 	}
 	
 }

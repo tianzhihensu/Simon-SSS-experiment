@@ -24,6 +24,9 @@ public class MainFunc {
 		treeConstruction.traverseXMLDocument(rootTreeNode, rootElement);
 		// 树构建好之后，每个节点的capacity的计算
 		treeConstruction.capacitySet(rootTreeNode);
+		// 再对树的叶子节点按照delay_mu降序排序
+		treeConstruction.sortLeafTreeNode(rootTreeNode);
+		
 		List<TreeNode> childrenList = rootTreeNode.getChildrenNodeList();
 		for (int i = 0; i < childrenList.size(); i++) {
 			System.out.println("第" + i + "个：" + childrenList.get(i).getCapacity());

@@ -160,6 +160,25 @@ public class TreeConstruction {
 	}
 	
 	/**
+	 * 对树中的所有叶子节点都进行排序
+	 * @param treeNode
+	 */
+	public void sortLeafTreeNode(TreeNode treeNode) {
+		if (isAllLeafTreeNode(treeNode)) {	// 该节点是顺序节点
+			treeOperation = new TreeOperation();
+			treeOperation.sort(treeNode);
+			
+			return;
+		}
+		
+		List<TreeNode> childrenNodesList = treeNode.getChildrenNodeList();
+		for (int i = 0; i < childrenNodesList.size(); i++) {
+			TreeNode childTreeNode = childrenNodesList.get(i);
+			sortLeafTreeNode(childTreeNode);
+		}
+	}
+	
+	/**
 	 * 判断该节点的子节点是否都是叶子节点
 	 * @param treeNode
 	 * @return	是的话，返回true

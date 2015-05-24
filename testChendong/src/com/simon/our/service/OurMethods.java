@@ -163,48 +163,18 @@ public class OurMethods {
 			totalResTime += tempNode.getDelayMu() + tempNode.getRespTimeValue();
 		}
 		
-		HashMap<String, Integer> indexAndDelayValue = new HashMap<String, Integer>();	// index这里设置为String类型
-		for (int i = 0; i < childrenList.size(); i++) {
-			indexAndDelayValue.put(String.valueOf(i), childrenList.get(i).getDelayMu());
-		}
-		
-		List<Map.Entry<String, Integer>> list_Data = new ArrayList<Map.Entry<String, Integer>>(
-				indexAndDelayValue.entrySet());
-		Collections.sort(list_Data,
-				new Comparator<Map.Entry<String, Integer>>() {
-					public int compare(Map.Entry<String, Integer> o1,
-							Map.Entry<String, Integer> o2) {
-						if ((o2.getValue() - o1.getValue()) > 0)
-							return 1;
-						else if ((o2.getValue() - o1.getValue()) == 0)
-							return 0;
-						else
-							return -1;
-					}
-				});
-		
-		Integer count = 0;	// 计数器
 		Integer sumOfDelayMu = 0;
-		for (int i = 0; i < list_Data.size(); i++) {
-			if (count == k) {
-				break;
-			}
-			sumOfDelayMu += list_Data.get(i).getValue();
-			count ++;
+		for (int i = 0; i < k; i++) {
+			sumOfDelayMu += childrenList.get(i).getDelayMu();
 		}
 		
 		Integer optimalResTime = totalResTime - sumOfDelayMu;
 		resList.add(optimalResTime);
 		
-		//除了最佳响应时间，还要保存到底哪些下标被monitor了
+		//除了最佳响应时间，还要保存到底哪些下标被monitor了, 因为这里已经排过序了，所以直接添加进下标即可
 		List<Integer> indexCollection = new ArrayList<Integer>();
-		count = 0;
-		for (int i = 0; i < list_Data.size(); i++) {
-			if (count == k) {
-				break;
-			}
-			indexCollection.add(Integer.valueOf(list_Data.get(i).getKey()));
-			count ++;
+		for (int i = 0; i < k; i++) {
+			indexCollection.add(i);
 		}
 		resList.add(indexCollection);
 		
